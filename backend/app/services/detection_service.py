@@ -1,5 +1,7 @@
 import asyncio
+from urllib.parse import urlparse
 
+import httpx
 from fastapi import HTTPException, UploadFile
 
 from app.config import settings
@@ -49,8 +51,70 @@ def _guess_media_type(filename: str | None, content_type: str | None) -> MediaTy
     return None
 
 
+def _filename_from_url(url: str) -> str:
+    path = urlparse(url).path
+    name = path.rsplit("/", maxsplit=1)[-1] if path else ""
+    return name or "image-from-url"
+
+
 class DetectionService:
-    """Orchestrates face detection, cropping, and EfficientNet-B0 inference."""
+    """Orchestrates face detection, cropping, and ViT inference."""
+
+    async def analyze_url(self, url: str) -> DetectionResult:
+        parsed = urlparse(url.strip())
+        if parsed.scheme not in {"http", "https"}:
+            raise HTTPException(
+                status_code=400,
+                detail="Only http:// and https:// image URLs are supported.",
+            )
+
+        filename = _filename_from_url(url)
+        try:
+            async with httpx.AsyncClient(
+                follow_redirects=True,
+                timeout=30.0,
+            ) as client:
+                response = await client.get(url)
+        except httpx.RequestError as exc:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Could not download image: {exc}",
+            ) from exc
+
+        if response.status_code >= 400:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Could not download image (HTTP {response.status_code}).",
+            )
+
+        content = response.content
+        if not content:
+            raise HTTPException(status_code=400, detail="Downloaded image is empty.")
+
+        if len(content) > settings.max_image_upload_bytes:
+            limit_mb = settings.max_image_upload_bytes / (1024 * 1024)
+            raise HTTPException(
+                status_code=413,
+                detail=f"Image exceeds the {limit_mb:.0f} MB limit.",
+            )
+
+        content_type = response.headers.get("content-type", "").split(";")[0].strip()
+        media_type = _guess_media_type(filename, content_type or None)
+        if media_type != MediaType.image:
+            raise HTTPException(
+                status_code=415,
+                detail="URL must point to a supported image (JPEG, PNG, WebP, BMP, or TIFF).",
+            )
+
+        try:
+            return await self._analyze_image(content, filename)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise HTTPException(
+                status_code=422,
+                detail=f"Could not process image: {exc}",
+            ) from exc
 
     async def analyze(self, file: UploadFile) -> DetectionResult:
         media_type = _guess_media_type(file.filename, file.content_type)

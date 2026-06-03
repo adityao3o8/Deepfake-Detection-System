@@ -3,6 +3,10 @@ from enum import Enum
 from pydantic import BaseModel, Field
 
 
+class DetectUrlRequest(BaseModel):
+    url: str = Field(min_length=1, description="Public HTTP(S) URL of an image to analyze")
+
+
 class MediaType(str, Enum):
     image = "image"
     video = "video"
