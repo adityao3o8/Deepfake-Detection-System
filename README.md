@@ -38,8 +38,8 @@ npx shadcn@latest add card input
 
 ## Backend (`backend/`)
 
-- **Stack:** FastAPI, PyTorch, EfficientNet-B0, Uvicorn
-- **Model:** EfficientNet-B0 fine-tuned on [FaceForensics++ (C23)](https://huggingface.co/Xicor9/efficientnet-b0-ffpp-c23) (class 0 = real, 1 = fake)
+- **Stack:** FastAPI, PyTorch, Hugging Face Transformers, Uvicorn
+- **Model:** [dima806/deepfake_vs_real_image_detection](https://huggingface.co/dima806/deepfake_vs_real_image_detection) (ViT, Real vs Fake)
 - **Layout:**
   - `app/routes/` — HTTP endpoints
   - `app/models/` — request/response schemas
@@ -60,9 +60,8 @@ On first start, weights (~16 MB) download from Hugging Face into the PyTorch hub
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `MODEL_WEIGHTS_PATH` | — | Local `.pth` checkpoint path |
+| `HF_MODEL_ID` | `dima806/deepfake_vs_real_image_detection` | Hugging Face model id |
 | `MODEL_DEVICE` | `cuda` or `cpu` | Inference device |
-| `USE_IMAGENET_NORMALIZE` | `false` | Apply ImageNet mean/std (enable only if your weights expect it) |
 
 API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 
