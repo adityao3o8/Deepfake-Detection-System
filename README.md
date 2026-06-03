@@ -100,6 +100,3 @@ API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 See [DEPLOYMENT.md](DEPLOYMENT.md) for fixing unstyled pages, `localhost` API errors, CORS, and Docker Compose.
 
-## License
-
-Add your license here.
