@@ -1,0 +1,24 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      CORS_ORIGINS: "*"
+      PRELOAD_MODEL_ON_STARTUP: "true"
+      PRELOAD_FACE_DETECTOR_ON_STARTUP: "true"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      BACKEND_INTERNAL_URL: http://backend:8000
+    depends_on:
+      - backend
+    restart: unless-stopped
