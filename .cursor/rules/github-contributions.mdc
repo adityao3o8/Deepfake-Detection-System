@@ -1,0 +1,48 @@
+---
+description: Git commit and push strategy to maximize qualifying GitHub contribution count
+alwaysApply: true
+---
+
+# GitHub contribution-friendly commits
+
+When the user asks to commit, push, or publish work to GitHub for this repo, follow these practices unless they explicitly ask for a single squash commit.
+
+## Goals
+
+- Increase **total contribution count** (each qualifying event), not only green calendar days.
+- Keep history **professional** (real, logical commits — no empty spam).
+
+## Before pushing
+
+1. Confirm commits use the user's GitHub-linked email (or ask them to set `git config user.email`).
+2. Push to **`main`** (default branch) or merge PRs into `main`.
+3. Prefer the remote: `https://github.com/adityao3o8/Deepfake-Detection-System.git`
+
+## Commit strategy
+
+- **Many small commits** over one giant commit when shipping a feature or milestone.
+- One commit per logical unit, for example:
+  - Backend route or service
+  - Frontend component or page
+  - Config / deps / docs
+  - Tests or fixes
+- Use clear, conventional messages (e.g. `feat:`, `fix:`, `docs:`).
+- Do **not** create empty commits or meaningless "update" commits solely to inflate count.
+
+## When pushing existing work
+
+If a large change set is ready:
+
+1. Stage and commit in **layers** (backend → frontend → docs) when possible.
+2. Push once all commits are ready, or push in batches if the user wants activity spread across days.
+3. If the user wants contributions on **multiple days**, suggest splitting pushes across calendar days with real work each day.
+
+## Other qualifying activity (optional)
+
+When appropriate, mention or use: Issues + linked PRs, merged PRs, and PR reviews — these can add to contribution count beyond commits.
+
+## Do not
+
+- Force-push `main` without explicit user request.
+- Rewrite published history to fake backdated commits.
+- Single squashed commit when the user wants maximum contribution count from a large change.
