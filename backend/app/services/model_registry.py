@@ -1,24 +1,22 @@
 from __future__ import annotations
 
 from app.config import settings
-from app.ml.efficientnet_detector import EfficientNetDeepfakeDetector
+from app.ml.vit_detector import ViTDeepfakeDetector
 
-_detector: EfficientNetDeepfakeDetector | None = None
+_detector: ViTDeepfakeDetector | None = None
 
 
-def get_detector() -> EfficientNetDeepfakeDetector:
+def get_detector() -> ViTDeepfakeDetector:
     if _detector is None:
         raise RuntimeError("Detection model is not loaded. Server may still be starting.")
     return _detector
 
 
-def load_detector() -> EfficientNetDeepfakeDetector:
+def load_detector() -> ViTDeepfakeDetector:
     global _detector
-    _detector = EfficientNetDeepfakeDetector(
-        weights_path=settings.model_weights_path,
-        weights_url=settings.model_weights_url,
+    _detector = ViTDeepfakeDetector(
+        model_id=settings.hf_model_id,
         device=settings.model_device,
-        use_imagenet_normalize=settings.use_imagenet_normalize,
     )
     return _detector
 

@@ -1,7 +1,7 @@
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from app.ml.efficientnet_detector import DEFAULT_WEIGHTS_URL
+from app.ml.vit_detector import DEFAULT_HF_MODEL_ID
 
 
 class Settings(BaseSettings):
@@ -11,10 +11,8 @@ class Settings(BaseSettings):
     debug: bool = False
     cors_origins: list[str] | str = "http://localhost:3000"
 
-    model_weights_path: str | None = None
-    model_weights_url: str = DEFAULT_WEIGHTS_URL
+    hf_model_id: str = DEFAULT_HF_MODEL_ID
     model_device: str | None = None
-    use_imagenet_normalize: bool = False
 
     preload_model_on_startup: bool = True
 
