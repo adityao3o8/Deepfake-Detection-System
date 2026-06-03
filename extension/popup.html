@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deepfake Detector</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="header">
+      <img src="icons/icon48.png" alt="" width="28" height="28" class="logo" />
+      <div>
+        <h1>Deepfake Detector</h1>
+        <p class="subtitle">ViT-based image analysis</p>
+      </div>
+    </header>
+
+    <main id="app">
+      <section id="idle" class="panel hidden">
+        <p class="hint">
+          Right-click any image on a page and choose
+          <strong>Check for Deepfake</strong>.
+        </p>
+      </section>
+
+      <section id="loading" class="panel hidden">
+        <div class="spinner" aria-hidden="true"></div>
+        <p class="status-text">Analyzing image…</p>
+        <p id="loading-url" class="url-preview"></p>
+      </section>
+
+      <section id="error" class="panel hidden">
+        <div class="banner banner-error">Analysis failed</div>
+        <p id="error-message" class="message"></p>
+        <p id="error-url" class="url-preview"></p>
+      </section>
+
+      <section id="result" class="panel hidden">
+        <div id="verdict-banner" class="banner"></div>
+        <div class="metrics">
+          <div class="metric">
+            <span class="metric-label">Confidence</span>
+            <span id="confidence-value" class="metric-value">—</span>
+          </div>
+          <div class="metric-row">
+            <span>Real</span>
+            <div class="bar-track">
+              <div id="real-bar" class="bar bar-real"></div>
+            </div>
+            <span id="real-pct" class="pct"></span>
+          </div>
+          <div class="metric-row">
+            <span>Fake</span>
+            <div class="bar-track">
+              <div id="fake-bar" class="bar bar-fake"></div>
+            </div>
+            <span id="fake-pct" class="pct"></span>
+          </div>
+        </div>
+        <p id="result-message" class="message"></p>
+        <p id="result-url" class="url-preview"></p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <label class="api-label" for="api-base">API</label>
+      <input
+        id="api-base"
+        type="url"
+        spellcheck="false"
+        placeholder="http://localhost:8000"
+      />
+      <button id="save-api" type="button">Save</button>
+    </footer>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
