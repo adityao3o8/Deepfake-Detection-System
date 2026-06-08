@@ -4,7 +4,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.routes import detection, health
+from app.routes import detection
+from app.routes import health as health_routes
 from app.services.face_registry import load_face_detector, unload_face_detector
 from app.services.model_registry import load_detector, unload_detector
 
@@ -46,5 +47,5 @@ def health() -> dict[str, str]:
     return {"status": "healthy"}
 
 
-app.include_router(health.router, prefix="/api", tags=["health"])
+app.include_router(health_routes.router, prefix="/api", tags=["health"])
 app.include_router(detection.router, prefix="/api", tags=["detection"])
