@@ -1,25 +1,42 @@
 import type { DetectionResult } from "@/types/detection";
 
+const DEFAULT_BACKEND_URL = "http://127.0.0.1:8000";
+
 /**
- * Resolve the API base URL for the current environment.
- * In the browser on an external host, uses the same-origin Next.js proxy
- * so requests do not target the user's localhost.
+ * Backend origin without trailing slash (no /api suffix).
+ * Server-side proxy uses BACKEND_INTERNAL_URL (see next.config.mjs rewrites).
  */
-export function getApiBaseUrl(): string {
+export function getBackendOrigin(): string {
   const explicit = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
+  return explicit ?? DEFAULT_BACKEND_URL;
+}
+
+/**
+ * Full URL for POST /api/detect.
+ *
+ * Browser on Vercel/local: same-origin /api/proxy/detect → BACKEND_INTERNAL_URL/api/detect
+ * Browser with NEXT_PUBLIC_API_URL set: {origin}/api/detect (direct to Render, etc.)
+ */
+export function getDetectUrl(): string {
+  const backendOrigin = getBackendOrigin();
+  const isLocalBackend =
+    backendOrigin.includes("localhost") ||
+    backendOrigin.includes("127.0.0.1");
 
   if (typeof window !== "undefined") {
-    if (
-      !explicit ||
-      explicit.includes("localhost") ||
-      explicit.includes("127.0.0.1")
-    ) {
-      return `${window.location.origin}/api/proxy`;
+    if (!process.env.NEXT_PUBLIC_API_URL || isLocalBackend) {
+      return `${window.location.origin}/api/proxy/detect`;
     }
-    return explicit;
+    return `${backendOrigin}/api/detect`;
   }
 
-  return explicit ?? "http://127.0.0.1:8000";
+  return `${backendOrigin}/api/detect`;
+}
+
+/** @deprecated Use getDetectUrl() — kept for any callers expecting a base URL */
+export function getApiBaseUrl(): string {
+  const url = getDetectUrl();
+  return url.replace(/\/detect$/, "");
 }
 
 export class ApiError extends Error {
@@ -36,7 +53,7 @@ export async function detectDeepfake(file: File): Promise<DetectionResult> {
   const formData = new FormData();
   formData.append("file", file);
 
-  const response = await fetch(`${getApiBaseUrl()}/detect`, {
+  const response = await fetch(getDetectUrl(), {
     method: "POST",
     body: formData,
   });
