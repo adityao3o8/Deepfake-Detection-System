@@ -9,7 +9,7 @@ class Settings(BaseSettings):
 
     app_name: str = "Deepfake Detection API"
     debug: bool = False
-    cors_origins: list[str] | str = "http://localhost:3000"
+    cors_origins: list[str] | str = "*"
 
     model_weights_path: str = str(DEFAULT_WEIGHTS_PATH)
     model_device: str | None = None
