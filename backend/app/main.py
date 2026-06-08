@@ -28,6 +28,17 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+
+@app.get("/")
+async def root():
+    return {"status": "ok"}
+
+
+@app.get("/health")
+async def health():
+    return {"status": "healthy"}
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
@@ -36,16 +47,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.get("/")
-def root() -> dict[str, str]:
-    return {"status": "ok", "message": "Deepfake Detection API is running"}
-
-
-@app.get("/health")
-def health() -> dict[str, str]:
-    return {"status": "healthy"}
-
 
 app.include_router(health_routes.router, prefix="/api", tags=["health"])
 app.include_router(detection.router, prefix="/api", tags=["detection"])
