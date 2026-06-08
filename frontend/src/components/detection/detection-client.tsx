@@ -1,9 +1,11 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 
 import { HeroSection } from "@/components/detection/hero-section";
 import { ResultsSection } from "@/components/detection/results-section";
+import { SectionDivider } from "@/components/detection/scroll-reveal";
 import { UploadSection } from "@/components/detection/upload-section";
 import { ApiError, detectDeepfake } from "@/lib/api";
 import {
@@ -105,6 +107,8 @@ export function DetectionClient() {
     <main className="min-h-screen bg-navy-deep">
       <HeroSection />
 
+      <SectionDivider />
+
       <UploadSection
         selectedFile={selectedFile}
         mediaKind={mediaKind}
@@ -116,18 +120,34 @@ export function DetectionClient() {
         onAnalyze={runDetection}
       />
 
-      {result && previewUrl && mediaKind && (
-        <div id="results">
-          <ResultsSection
-            result={result}
-            previewUrl={previewUrl}
-            mediaKind={mediaKind}
-            onReset={reset}
-          />
-        </div>
-      )}
+      <AnimatePresence mode="wait">
+        {result && previewUrl && mediaKind && (
+          <motion.div
+            id="results"
+            key={result.filename}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, y: 24 }}
+            transition={{ duration: 0.4 }}
+          >
+            <SectionDivider />
+            <ResultsSection
+              result={result}
+              previewUrl={previewUrl}
+              mediaKind={mediaKind}
+              onReset={reset}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      <footer className="border-t border-white/5 py-8 text-center text-sm text-slate-500">
+      <motion.footer
+        initial={{ opacity: 0, y: 32 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-10%" }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="border-t border-white/5 py-8 text-center text-sm text-slate-500"
+      >
         <p>Deepfake Detection System · ViT · Hugging Face</p>
         <a
           href="https://github.com/adityao3o8/Deepfake-Detection-System"
@@ -137,7 +157,7 @@ export function DetectionClient() {
         >
           View on GitHub
         </a>
-      </footer>
+      </motion.footer>
     </main>
   );
 }
