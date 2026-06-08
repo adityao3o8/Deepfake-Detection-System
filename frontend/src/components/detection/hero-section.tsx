@@ -45,14 +45,19 @@ export function HeroSection() {
       <motion.button
         type="button"
         onClick={scrollToUpload}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.2, duration: 0.6 }}
         className="absolute bottom-10 z-10 flex flex-col items-center gap-1 text-slate-400 transition-colors hover:text-white"
         aria-label="Scroll to upload"
       >
         <span className="text-xs uppercase tracking-widest">Upload</span>
-        <ChevronDown className="size-6 animate-bounce" />
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <ChevronDown className="size-6" />
+        </motion.div>
       </motion.button>
     </section>
   );
