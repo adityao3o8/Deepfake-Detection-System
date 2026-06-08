@@ -148,7 +148,7 @@ export function DetectionClient() {
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="border-t border-white/5 py-8 text-center text-sm text-slate-500"
       >
-        <p>Deepfake Detection System · ViT · Hugging Face</p>
+        <p>Deepfake Detection System · EfficientNet-B0</p>
         <a
           href="https://github.com/adityao3o8/Deepfake-Detection-System"
           target="_blank"

@@ -29,7 +29,7 @@ export function HeroSection() {
           <span className="gradient-text">Deepfake Detection</span>
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-lg text-slate-300/90 sm:text-xl">
-          Upload any image or video. ViT deepfake detection in seconds.
+          Upload any image or video. EfficientNet deepfake detection in seconds.
         </p>
         <motion.button
           type="button"

@@ -1,8 +1,13 @@
 # Deepfake Detection System
 
 [![Repository](https://img.shields.io/badge/GitHub-Deepfake--Detection--System-131a43?style=flat&logo=github)](https://github.com/adityao3o8/Deepfake-Detection-System)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-1a5999?style=flat)](https://deepfake-detection-system-livid.vercel.app)
 
-A monorepo for detecting AI-generated or manipulated media (images and video). The system combines a web frontend for uploads and results, a FastAPI backend with a self-trained EfficientNet-B0 model, and a Chrome extension for right-click analysis on any website.
+A monorepo for detecting AI-generated or manipulated media (images and video).
+
+**Live demo:** [deepfake-detection-system-livid.vercel.app](https://deepfake-detection-system-livid.vercel.app)
+
+The system combines a web frontend for uploads and results, a FastAPI backend with a self-trained EfficientNet-B0 model, and a Chrome extension for right-click analysis on any website.
 
 ## Project structure
 
@@ -155,6 +160,16 @@ docker compose up --build
 Open [http://localhost:3000](http://localhost:3000). The backend Dockerfile copies `deepfake_efficientnet.pth` into the image at `/app/deepfake_efficientnet.pth`.
 
 For external servers, see [DEPLOYMENT.md](DEPLOYMENT.md) (CORS, API proxy, nginx, binding to `0.0.0.0`).
+
+### Vercel (frontend)
+
+The frontend is deployed at [deepfake-detection-system-livid.vercel.app](https://deepfake-detection-system-livid.vercel.app). In Vercel project settings, set **`BACKEND_INTERNAL_URL`** to your hosted FastAPI URL. Add the Vercel origin to backend **`CORS_ORIGINS`**:
+
+```bash
+CORS_ORIGINS=https://deepfake-detection-system-livid.vercel.app
+```
+
+Without a reachable backend, uploads will fail with a network error.
 
 ## Development workflow
 
