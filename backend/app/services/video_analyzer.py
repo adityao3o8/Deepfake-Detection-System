@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from app.config import settings
 from app.ml.inference_scores import InferenceScores
-from app.ml.vit_detector import ViTDeepfakeDetector
+from app.ml.efficientnet_detector import EfficientNetDeepfakeDetector
 from app.ml.face_detection import FaceDetector, NO_FACE_WARNING
 from app.ml.video import VideoFrame, VideoMetadata, extract_frames
 
@@ -23,7 +23,7 @@ class VideoAnalysisResult:
 
 
 def analyze_video(
-    detector: ViTDeepfakeDetector,
+    detector: EfficientNetDeepfakeDetector,
     face_detector: FaceDetector,
     video_bytes: bytes,
     *,

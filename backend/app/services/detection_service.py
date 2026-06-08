@@ -58,7 +58,7 @@ def _filename_from_url(url: str) -> str:
 
 
 class DetectionService:
-    """Orchestrates face detection, cropping, and ViT inference."""
+    """Orchestrates face detection, cropping, and EfficientNet-B0 inference."""
 
     async def analyze_url(self, url: str) -> DetectionResult:
         parsed = urlparse(url.strip())
